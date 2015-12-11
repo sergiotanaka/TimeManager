@@ -4,6 +4,14 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaQuery;
 
+/**
+ * Servico responsavel pela persistencia de entidades.
+ * 
+ * @param <T>
+ *            Tipo da entidade.
+ * @param <I>
+ *            Tipo do identificador da entidade.
+ */
 public interface Repository<T, I> {
 
 	public void create(T entity);
@@ -15,7 +23,9 @@ public interface Repository<T, I> {
 	public T retrieveById(I id);
 
 	public List<T> retrieveAll();
-	
-	public List<T> retrieveByCriteria(CriteriaQuery<T> query);
+
+	public CqWrapper<T> getCriteriaQuery();
+
+	public List<T> retrieveByCriteria(CriteriaQuery<T> cq);
 
 }

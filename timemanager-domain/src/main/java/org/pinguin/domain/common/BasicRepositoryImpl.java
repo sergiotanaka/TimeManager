@@ -1,14 +1,16 @@
 package org.pinguin.domain.common;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import com.google.inject.persist.Transactional;
 
 /**
  * Implementacao das operacoes basicas de um repositorio.
@@ -18,9 +20,11 @@ import javax.persistence.criteria.Root;
  * @param <T>
  * @param <I>
  */
+@Transactional
 public abstract class BasicRepositoryImpl<T, I> implements Repository<T, I> {
 
-	@PersistenceContext(unitName = "main")
+	// @PersistenceContext(unitName = "main")
+	@Inject
 	private EntityManager entityManager;
 
 	@Override
@@ -41,32 +45,33 @@ public abstract class BasicRepositoryImpl<T, I> implements Repository<T, I> {
 
 	@Override
 	public T retrieveById(I id) {
-		return entityManager.find(retrieveEntityType(), id);
+		return entityManager.find(getEntityType(), id);
 	}
 
 	@Override
 	public List<T> retrieveAll() {
-		Class<T> entityType = retrieveEntityType();
-
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<T> q = cb.createQuery(entityType);
-		Root<T> c = q.from(entityType);
-		q.select(c);
-		TypedQuery<T> query = entityManager.createQuery(q);
-		List<T> results = query.getResultList();
-		return results;
+		TypedQuery<T> query = entityManager.createQuery(getCriteriaQuery().cq());
+		return query.getResultList();
 	}
 
 	@Override
-	public List<T> retrieveByCriteria(CriteriaQuery<T> query) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<T> retrieveByCriteria(CriteriaQuery<T> cq) {
+		TypedQuery<T> query = entityManager.createQuery(cq);
+		return query.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
-	private Class<T> retrieveEntityType() {
-		Class<T> type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		return type;
+	/**
+	 * @return {@link CriteriaQuery} com FROM definido.
+	 */
+	@Override
+	public CqWrapper<T> getCriteriaQuery() {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(getEntityType());
+		Root<T> root = cq.from(getEntityType());
+		cq.select(root);
+		return new CqWrapperImpl<T>(cb, cq, root);
 	}
+
+	protected abstract Class<T> getEntityType();
 
 }
