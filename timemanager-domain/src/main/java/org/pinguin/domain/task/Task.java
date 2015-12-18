@@ -98,6 +98,9 @@ public class Task {
 		this.state = state;
 	}
 
+	/**
+	 * @return {@link #duration}.
+	 */
 	public Long getDuration() {
 		return duration;
 	}
