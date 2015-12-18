@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.google.inject.persist.Transactional;
@@ -50,26 +49,29 @@ public abstract class BasicRepositoryImpl<T, I> implements Repository<T, I> {
 
 	@Override
 	public List<T> retrieveAll() {
-		TypedQuery<T> query = entityManager.createQuery(getCriteriaQuery().cq());
-		return query.getResultList();
-	}
-
-	@Override
-	public List<T> retrieveByCriteria(CriteriaQuery<T> cq) {
-		TypedQuery<T> query = entityManager.createQuery(cq);
-		return query.getResultList();
-	}
-
-	/**
-	 * @return {@link CriteriaQuery} com FROM definido.
-	 */
-	@Override
-	public CqWrapper<T> getCriteriaQuery() {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(getEntityType());
 		Root<T> root = cq.from(getEntityType());
 		cq.select(root);
-		return new CqWrapperImpl<T>(cb, cq, root);
+		TypedQuery<T> query = entityManager.createQuery(cq);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<T> retrieveByCondition(String conditionalExpression, Param... params) {
+		if (conditionalExpression.isEmpty()) {
+			// TODO tratar
+		}
+
+		String jpql = String.format("SELECT e FROM %s e WHERE %s", getEntityType().getName(), conditionalExpression);
+
+		TypedQuery<T> query = entityManager.createQuery(jpql, getEntityType());
+		for (Param param : params) {
+			query.setParameter(param.getName(), param.getValue());
+		}
+
+		List<T> results = query.getResultList();
+		return results;
 	}
 
 	protected abstract Class<T> getEntityType();

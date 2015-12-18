@@ -2,8 +2,6 @@ package org.pinguin.domain.common;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
-
 /**
  * Servico responsavel pela persistencia de entidades.
  * 
@@ -24,8 +22,30 @@ public interface Repository<T, I> {
 
 	public List<T> retrieveAll();
 
-	public CqWrapper<T> getCriteriaQuery();
+	/**
+	 * @param conditionalExpression
+	 *            JQPL, somente o termo depois do WHERE.
+	 * @return
+	 */
+	public List<T> retrieveByCondition(String conditionalExpression, Param... params);
 
-	public List<T> retrieveByCriteria(CriteriaQuery<T> cq);
+	public static class Param {
+		private final String name;
+		private final Object value;
+
+		public Param(String name, Object value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public Object getValue() {
+			return value;
+		}
+
+	}
 
 }
