@@ -1,5 +1,6 @@
 package org.pinguin.service.task;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,11 +29,15 @@ public class TimeAllocatorTest {
 
 		TimeAllocator allocator = injector.getInstance(TimeAllocator.class);
 
-		Set<Task> tasks = new HashSet<>();
+		Set<Task> tasks = new HashSet<>(
+				Arrays.asList(new Task("task1", 2L, 60L), new Task("task2", 3L, 90L), new Task("task3", 1L, 45L)));
 
 		List<AllocatedTask> allocated = allocator.alloc(tasks);
 
-		Assert.assertEquals(6, allocated.size());
+		Assert.assertEquals(3, allocated.size());
+		Assert.assertEquals("task3", allocated.get(0).getName());
+		Assert.assertEquals("task1", allocated.get(1).getName());
+		Assert.assertEquals("task2", allocated.get(2).getName());
 	}
 
 }

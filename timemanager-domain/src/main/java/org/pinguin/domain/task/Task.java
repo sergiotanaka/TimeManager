@@ -50,6 +50,12 @@ public class Task {
 		this(name, description, category, duration, null);
 	}
 
+	public Task(String name, Long priority, Long duration) {
+		this.name = name;
+		this.priority = priority;
+		this.duration = duration;
+	}
+
 	// GETTERS e SETTERS //
 
 	public Long getId() {
