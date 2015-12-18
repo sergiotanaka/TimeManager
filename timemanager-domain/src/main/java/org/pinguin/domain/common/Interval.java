@@ -1,4 +1,4 @@
-package org.pinguin.service.task;
+package org.pinguin.domain.common;
 
 import java.util.Date;
 

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.pinguin.domain.common.Interval;
 import org.pinguin.domain.task.Task;
 
 /**

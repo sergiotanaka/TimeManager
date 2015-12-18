@@ -2,6 +2,8 @@ package org.pinguin.service.task;
 
 import java.util.Date;
 
+import org.pinguin.domain.common.Interval;
+
 public class SimpleInterval implements Interval {
 
 	private Date start;

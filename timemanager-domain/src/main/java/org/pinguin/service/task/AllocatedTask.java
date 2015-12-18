@@ -2,6 +2,8 @@ package org.pinguin.service.task;
 
 import java.util.Date;
 
+import org.pinguin.domain.common.Interval;
+
 /**
  * Tarefa alocada no tempo.
  */
