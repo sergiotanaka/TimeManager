@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Tarefa alocada no tempo.
  */
-public class AllocatedTask {
+public class AllocatedTask implements Interval {
 
 	private Long taskId;
 	private String name;
@@ -36,6 +36,7 @@ public class AllocatedTask {
 		this.name = name;
 	}
 
+	@Override
 	public Date getStart() {
 		return start;
 	}
@@ -44,6 +45,7 @@ public class AllocatedTask {
 		this.start = start;
 	}
 
+	@Override
 	public Date getEnd() {
 		return end;
 	}

@@ -13,7 +13,7 @@ import org.pinguin.domain.task.Task;
  */
 public class TimeAllocator {
 
-	public List<AllocatedTask> alloc(Collection<Task> tasks, Date initialTime) {
+	public List<AllocatedTask> alloc(Collection<Task> tasks, Date initialTime, Interval... restrictions) {
 
 		List<Task> aux = new ArrayList<>(tasks);
 
