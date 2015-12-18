@@ -48,7 +48,7 @@ public class TimeAllocatorTest {
 		// Esperado que, a task3 inicie as 9h00 e termine as 9h45
 		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 00, 0), allocated.get(0).getStart());
 		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 45, 0), allocated.get(0).getEnd());
-		// Esperado que, a task1 inicie as 9h40 e termine as 10h45
+		// Esperado que, a task1 inicie as 9h45 e termine as 10h45
 		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 45, 0), allocated.get(1).getStart());
 		Assert.assertEquals(getTimestamp(2015, 01, 01, 10, 45, 0), allocated.get(1).getEnd());
 		// Esperado que, a task2 inicie as 10h45 e termine as 12h15
@@ -64,7 +64,8 @@ public class TimeAllocatorTest {
 		Set<Task> tasks = new HashSet<>(
 				Arrays.asList(new Task("task1", 2L, 60L), new Task("task2", 3L, 90L), new Task("task3", 1L, 45L)));
 
-		// Setando 01/01/2015 as 9:00
+		// Setando para iniciar dia 01/01/2015 as 9:00, com uma restricao de
+		// horario das 9:30 as 10:00
 		List<AllocatedTask> allocated = allocator.alloc(tasks, getTimestamp(2015, 01, 01, 9, 0, 0),
 				new SimpleInterval(getTimestamp(2015, 01, 01, 9, 30, 0), getTimestamp(2015, 01, 01, 10, 00, 0)));
 
@@ -75,15 +76,17 @@ public class TimeAllocatorTest {
 		Assert.assertEquals("task2", allocated.get(3).getName());
 
 		// Esperado que, a task3 inicie as 9h00, tenha um intervalo de 9h30 as
-		// 10hs e termine as 9h45
+		// 10hs e termine as 10h15
 		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 00, 0), allocated.get(0).getStart());
-		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 45, 0), allocated.get(0).getEnd());
-		// Esperado que, a task1 inicie as 9h40 e termine as 10h45
-		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 45, 0), allocated.get(1).getStart());
-		Assert.assertEquals(getTimestamp(2015, 01, 01, 10, 45, 0), allocated.get(1).getEnd());
-		// Esperado que, a task2 inicie as 10h45 e termine as 12h15
-		Assert.assertEquals(getTimestamp(2015, 01, 01, 10, 45, 0), allocated.get(2).getStart());
-		Assert.assertEquals(getTimestamp(2015, 01, 01, 12, 15, 0), allocated.get(2).getEnd());
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 9, 30, 0), allocated.get(0).getEnd());
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 10, 00, 0), allocated.get(1).getStart());
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 10, 15, 0), allocated.get(1).getEnd());
+		// Esperado que, a task1 inicie as 10h15 e termine as 11h15
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 10, 15, 0), allocated.get(2).getStart());
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 11, 15, 0), allocated.get(2).getEnd());
+		// Esperado que, a task2 inicie as 11h15 e termine as 12h45
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 11, 15, 0), allocated.get(3).getStart());
+		Assert.assertEquals(getTimestamp(2015, 01, 01, 12, 45, 0), allocated.get(3).getEnd());
 	}
 
 	private Date getTimestamp(int year, int month, int date, int hourOfDay, int minute, int second) {
