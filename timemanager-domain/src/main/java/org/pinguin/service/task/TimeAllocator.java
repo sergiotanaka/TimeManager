@@ -19,6 +19,14 @@ import org.pinguin.domain.task.Task;
  */
 public class TimeAllocator {
 
+	/**
+	 * Aloca as {@link Task}s passadas no tempo.
+	 * 
+	 * @param tasks
+	 * @param initialTime
+	 * @param restrictions
+	 * @return
+	 */
 	public List<AllocatedTask> alloc(Collection<Task> tasks, Date initialTime, Interval... restrictions) {
 
 		IntervalSet restrictionSet = new IntervalSet(restrictions);
@@ -143,6 +151,13 @@ public class TimeAllocator {
 			return resume(intersects);
 		}
 
+		/**
+		 * Resume varios intervalos em um unico. Assume-se que os intervalos
+		 * passados sao continuos.
+		 * 
+		 * @param intervals
+		 * @return
+		 */
 		public Interval resume(Collection<Interval> intervals) {
 			Date start = null;
 			Date end = null;
