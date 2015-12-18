@@ -18,8 +18,14 @@ public class AllocatedTask implements Interval {
 	}
 
 	public AllocatedTask(Long taskId, String name) {
+		this(taskId, name, null, null);
+	}
+
+	public AllocatedTask(Long taskId, String name, Date start, Date end) {
 		this.taskId = taskId;
 		this.name = name;
+		this.start = start;
+		this.end = end;
 	}
 
 	public Long getTaskId() {
@@ -59,5 +65,15 @@ public class AllocatedTask implements Interval {
 	@Override
 	public String toString() {
 		return "AllocatedTask [taskId=" + taskId + ", name=" + name + ", start=" + start + ", end=" + end + "]";
+	}
+
+	@Override
+	public boolean isIn(Date instant) {
+		return instant.after(start) && instant.before(end);
+	}
+
+	@Override
+	public boolean intersect(Interval interval) {
+		return isIn(interval.getStart()) || isIn(interval.getEnd());
 	}
 }

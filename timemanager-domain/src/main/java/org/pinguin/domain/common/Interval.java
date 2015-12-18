@@ -10,4 +10,8 @@ public interface Interval {
 	public Date getStart();
 
 	public Date getEnd();
+
+	public boolean isIn(Date instant);
+
+	public boolean intersect(Interval interval);
 }

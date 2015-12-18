@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.pinguin.domain.common.SimpleInterval;
 import org.pinguin.domain.task.Task;
 
 import com.google.inject.Guice;
@@ -67,7 +68,7 @@ public class TimeAllocatorTest {
 		List<AllocatedTask> allocated = allocator.alloc(tasks, getTimestamp(2015, 01, 01, 9, 0, 0),
 				new SimpleInterval(getTimestamp(2015, 01, 01, 9, 30, 0), getTimestamp(2015, 01, 01, 10, 00, 0)));
 
-		Assert.assertEquals(3, allocated.size());
+		Assert.assertEquals(4, allocated.size());
 		Assert.assertEquals("task3", allocated.get(0).getName());
 		Assert.assertEquals("task3", allocated.get(1).getName());
 		Assert.assertEquals("task1", allocated.get(2).getName());
