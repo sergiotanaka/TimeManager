@@ -13,6 +13,8 @@
 
 	<modules>
 		<module>timemanager-domain</module>
+		<module>timemanager-app</module>
+		<module>timemanager-web</module>
 	</modules>
 
 	<build>
